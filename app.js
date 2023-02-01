@@ -2,6 +2,7 @@
 
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
+const { get } = require('http');
 
 const path = require('path');
 const PunkAPIWrapper = require('punkapi-javascript-wrapper');
@@ -21,15 +22,23 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
-app.get('/random-beer', (req, res) => {
-  res.render('random-beer');
-});
-
 app.get('/beers', async (req, res) => {
   try {
   let allBeers = await punkAPI.getBeers();
   console.log('Heres the beers', allBeers)
   res.render('beers', {allBeers})
+  }
+  catch(error) {
+    console.log('Error getting the bears', error)
+  }
+});
+
+
+app.get('/random-beer', async (req, res) => {
+  try {
+  let allBeers = await punkAPI.getRandom();
+  console.log('Heres the beers', allBeers)
+  res.render('random-beer', {allBeers})
   }
   catch(error) {
     console.log('Error getting the bears', error)
